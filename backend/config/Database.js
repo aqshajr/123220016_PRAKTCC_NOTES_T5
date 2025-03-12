@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 
-const db = new Sequelize('webnote_aqsha', 'root', '', {
-    host: 'localhost',
+const db = new Sequelize('123220016_webnote', 'root', 'mynotebook', {
+    host: '34.69.156.211',
     dialect: 'mysql'
 });
 
