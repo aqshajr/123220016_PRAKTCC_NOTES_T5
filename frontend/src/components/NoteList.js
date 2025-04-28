@@ -12,13 +12,13 @@ const NoteList = () => {
     }, []);
 
     const getNotes = async () => {
-        const response = await axios.get('http://localhost:5000/notes');
+        const response = await axios.get('https://tugas6-backend-749281711221.us-central1.run.app/notes');
         setNotes(response.data);
     };
 
     const deleteNote = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/notes/${id}`);
+            await axios.delete(`https://tugas6-backend-749281711221.us-central1.run.app/notes/${id}`);
             getNotes();
         } catch (error) {
             console.log(error);
