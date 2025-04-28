@@ -32,7 +32,7 @@ const EditNote = () => {
     const updateNote = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(`http://localhost:5000/notes/${id}`, {
+            await axios.patch(`https://tugas6-backend-749281711221.us-central1.run.app/notes/${id}`, {
                 title,
                 description,
                 category,
@@ -44,7 +44,7 @@ const EditNote = () => {
     };
 
     const getNoteById = async () => {
-        const response = await axios.get(`http://localhost:5000/notes/${id}`);
+        const response = await axios.get(`https://tugas6-backend-749281711221.us-central1.run.app/notes/${id}`);
         setTitle(response.data.title);
         setDescription(response.data.description);
         setCategory(response.data.category);
