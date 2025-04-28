@@ -28,7 +28,7 @@ const AddNote = () => {
     const saveNote = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/notes', {
+            await axios.post('https://tugas6-backend-749281711221.us-central1.run.app/notes', {
                 title,
                 description,
                 category,
