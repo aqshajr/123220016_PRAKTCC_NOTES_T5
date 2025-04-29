@@ -146,7 +146,7 @@ const styles = {
         fontWeight: 'bold',
         color: '#333',
         marginBottom: '20px',
-        fontFamily: '"Poppins", cursive', 
+        fontFamily: '"Arial", cursive', 
     },
     notebook: {
         width: '1000px', 
