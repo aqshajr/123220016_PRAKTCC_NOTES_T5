@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Backend Endpoint Test</title>
+</head>
+<body>
+    <h2>🔧 Backend Endpoint Test</h2>
+    
+    <div id="results"></div>
+    
+    <button onclick="testHealth()">Test Health Endpoint</button>
+    <button onclick="testLogin()">Test Login Endpoint</button>
+    <button onclick="testCORS()">Test CORS</button>
+    
+    <script>
+        const API_BASE = 'https://tugas6-backend-749281711221.us-central1.run.app';
+        const resultsDiv = document.getElementById('results');
+        
+        function log(message) {
+            resultsDiv.innerHTML += '<p>' + new Date().toLocaleTimeString() + ': ' + message + '</p>';
+        }
+        
+        async function testHealth() {
+            log('🔄 Testing health endpoint...');
+            try {
+                const response = await fetch(API_BASE + '/health', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                log('✅ Health: ' + response.status + ' - ' + await response.text());
+            } catch (error) {
+                log('❌ Health error: ' + error.message);
+            }
+        }
+        
+        async function testLogin() {
+            log('🔄 Testing login endpoint...');
+            try {
+                const response = await fetch(API_BASE + '/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        email: 'test@example.com',
+                        password: 'test123'
+                    })
+                });
+                log('✅ Login: ' + response.status + ' - ' + await response.text());
+            } catch (error) {
+                log('❌ Login error: ' + error.message);
+            }
+        }
+        
+        async function testCORS() {
+            log('🔄 Testing CORS preflight...');
+            try {
+                const response = await fetch(API_BASE + '/login', {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': 'https://g-04-450802.uc.r.appspot.com',
+                        'Access-Control-Request-Method': 'POST',
+                        'Access-Control-Request-Headers': 'Content-Type'
+                    }
+                });
+                log('✅ CORS: ' + response.status + ' - Headers: ' + JSON.stringify([...response.headers]));
+            } catch (error) {
+                log('❌ CORS error: ' + error.message);
+            }
+        }
+        
+        // Auto-test on load
+        setTimeout(testHealth, 1000);
+    </script>
+</body>
+</html> 
