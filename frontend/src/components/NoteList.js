@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { API_ENDPOINTS, getAuthHeaders, handleApiError } from '../utils';
 
 const NoteList = () => {
     const [notes, setNotes] = useState([]);
@@ -12,16 +13,24 @@ const NoteList = () => {
     }, []);
 
     const getNotes = async () => {
-        const response = await axios.get('https://tugas6-backend-749281711221.us-central1.run.app/notes');
-        setNotes(response.data);
+        try {
+            const response = await axios.get(API_ENDPOINTS.NOTES, {
+                headers: getAuthHeaders()
+            });
+            setNotes(response.data);
+        } catch (error) {
+            handleApiError(error);
+        }
     };
 
     const deleteNote = async (id) => {
         try {
-            await axios.delete(`https://tugas6-backend-749281711221.us-central1.run.app/notes/${id}`);
+            await axios.delete(API_ENDPOINTS.NOTE_BY_ID(id), {
+                headers: getAuthHeaders()
+            });
             getNotes();
         } catch (error) {
-            console.log(error);
+            handleApiError(error);
         }
     };
 

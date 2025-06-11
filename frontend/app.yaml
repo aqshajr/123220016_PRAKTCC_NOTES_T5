@@ -1,2 +1,17 @@
 runtime: nodejs20
 service: default
+
+handlers:
+  - url: /static
+    static_dir: build/static
+
+  - url: /(.*\.(js|css|ico|png|jpg|svg|woff|woff2))$
+    static_files: build/\1
+    upload: build/.*\.(js|css|ico|png|jpg|svg|woff|woff2)$
+
+  - url: /.*
+    static_files: build/index.html
+    upload: build/index.html
+
+env_variables:
+  NODE_ENV: production

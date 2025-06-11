@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { API_ENDPOINTS } from '../utils';
 
 const EditNote = () => {
     const [title, setTitle] = useState('');
@@ -32,7 +33,7 @@ const EditNote = () => {
     const updateNote = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(`https://tugas6-backend-749281711221.us-central1.run.app/notes/${id}`, {
+            await axios.patch(API_ENDPOINTS.NOTE_BY_ID(id), {
                 title,
                 description,
                 category,
@@ -44,7 +45,7 @@ const EditNote = () => {
     };
 
     const getNoteById = async () => {
-        const response = await axios.get(`https://tugas6-backend-749281711221.us-central1.run.app/notes/${id}`);
+        const response = await axios.get(API_ENDPOINTS.NOTE_BY_ID(id));
         setTitle(response.data.title);
         setDescription(response.data.description);
         setCategory(response.data.category);

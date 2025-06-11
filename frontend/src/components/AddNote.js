@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_ENDPOINTS } from '../utils';
 
 const AddNote = () => {
     const [title, setTitle] = useState('');
@@ -28,7 +29,7 @@ const AddNote = () => {
     const saveNote = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://tugas6-backend-749281711221.us-central1.run.app/notes', {
+            await axios.post(API_ENDPOINTS.NOTES, {
                 title,
                 description,
                 category,
