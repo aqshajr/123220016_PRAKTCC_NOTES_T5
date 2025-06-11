@@ -1,10 +1,17 @@
 //file utk melakukan pengujian terhadap API
+
+// === NOTES ENDPOINTS ===
+// Get All Notes (butuh authentication)
 GET http://localhost:5000/notes
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 
 ###
+// Get Note by ID (butuh authentication)
 GET http://localhost:5000/notes/1
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 
 ###
+// Create Note
 POST http://localhost:5000/notes
 Content-Type: application/json
 
@@ -16,8 +23,10 @@ Content-Type: application/json
 }
 
 ###
+// Update Note (butuh authentication)
 PATCH http://localhost:5000/notes/1
 Content-Type: application/json
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 
 //data yg akan kita kirimkan
 {
@@ -27,22 +36,24 @@ Content-Type: application/json
 }
 
 ###
+// Delete Note
 DELETE http://localhost:5000/notes/2
 
 ###
+// === USER AUTHENTICATION ENDPOINTS ===
 // Register User
 POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-    "name": "Test User",
-    "email": "test@example.com",
+    "name": "coba",
+    "email": "coba@example.com",
     "password": "123456",
     "confPassword": "123456"
 }
 
 ###
-// Login
+// Login - mengembalikan access token dan refresh token
 POST http://localhost:5000/login
 Content-Type: application/json
 
@@ -52,14 +63,36 @@ Content-Type: application/json
 }
 
 ###
-// Get Users (requires token)
+// === USER MANAGEMENT ENDPOINTS (smua butuh authentication) ===
+// Get All Users (butuh token)
 GET http://localhost:5000/users
 Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 
 ###
-// Refresh Token
+// Get User by ID (butuh token)
+GET http://localhost:5000/users/1
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+
+###
+// Update User (butuh token)
+PATCH http://localhost:5000/users/1
+Content-Type: application/json
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+
+{
+    "name": "Updated Name",
+    "email": "updated@example.com"
+}
+
+###
+// Delete User 
+DELETE http://localhost:5000/users/1
+
+###
+// === TOKEN MANAGEMENT ===
+// Refresh Access Token (pakai refresh token dr cookie)
 GET http://localhost:5000/token
 
 ###
-// Logout
+// Logout (clears refresh token cookie)
 DELETE http://localhost:5000/logout
