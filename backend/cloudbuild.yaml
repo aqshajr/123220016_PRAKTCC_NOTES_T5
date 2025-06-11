@@ -1,4 +1,10 @@
 steps:
+  # Download .env file from Google Cloud Storage
+  - name: "gcr.io/cloud-builders/gsutil"
+    args: ["cp", "gs://webnote_aqsha/.env", ".env"]
+    dir: "backend"
+  
+  # Copy .env to backend directory if needed
   - name: "gcr.io/cloud-builders/docker"
     dir: "backend" 
     args: [
@@ -19,7 +25,8 @@ steps:
       "--timeout", "1000s",
       "--port", "5000",
       "--region", "us-central1",
-      "--allow-unauthenticated"
+      "--allow-unauthenticated",
+      "--set-env-vars", "DB_NAME=123220016_webnote,DB_USERNAME=root,DB_PASSWORD=mynotebook,DB_HOST=34.69.156.211,ACCESS_TOKEN_SECRET=mysecretaccesstokenkey999,REFRESH_TOKEN_SECRET=mysecretrefreshtokenkey999"
     ]
 
 options:
