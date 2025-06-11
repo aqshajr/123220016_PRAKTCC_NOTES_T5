@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { API_ENDPOINTS } from '../utils';
+import { API_ENDPOINTS, getAuthHeaders, handleApiError } from '../utils';
 
 const EditNote = () => {
     const [title, setTitle] = useState('');
@@ -36,19 +36,29 @@ const EditNote = () => {
             await axios.patch(API_ENDPOINTS.NOTE_BY_ID(id), {
                 title,
                 description,
-                category,
+                category
+            }, {
+                headers: getAuthHeaders()
             });
             navigate('/'); 
         } catch (error) {
-            console.log(error);
+            console.error('Error updating note:', error);
+            handleApiError(error);
         }
     };
 
     const getNoteById = async () => {
-        const response = await axios.get(API_ENDPOINTS.NOTE_BY_ID(id));
-        setTitle(response.data.title);
-        setDescription(response.data.description);
-        setCategory(response.data.category);
+        try {
+            const response = await axios.get(API_ENDPOINTS.NOTE_BY_ID(id), {
+                headers: getAuthHeaders()
+            });
+            setTitle(response.data.title);
+            setDescription(response.data.description);
+            setCategory(response.data.category);
+        } catch (error) {
+            console.error('Error fetching note:', error);
+            handleApiError(error);
+        }
     };
 
     return (

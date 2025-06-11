@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { API_ENDPOINTS } from '../utils';
+import { API_ENDPOINTS, getAuthHeaders } from '../utils';
 
 const AddNote = () => {
     const [title, setTitle] = useState('');
@@ -33,10 +33,16 @@ const AddNote = () => {
                 title,
                 description,
                 category,
+            }, {
+                headers: getAuthHeaders()
             });
             navigate('/'); 
         } catch (error) {
-            console.log(error);
+            console.error('Error creating note:', error);
+            if (error.response?.status === 401) {
+                localStorage.removeItem('accessToken');
+                navigate('/login');
+            }
         }
     };
 
