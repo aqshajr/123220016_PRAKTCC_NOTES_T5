@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { API_ENDPOINTS } from '../utils';
+import { apiClient } from '../utils';
 
 const EditNote = () => {
     const [title, setTitle] = useState('');
@@ -33,7 +32,7 @@ const EditNote = () => {
     const updateNote = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(API_ENDPOINTS.NOTE_BY_ID(id), {
+            await apiClient.patch(`/notes/${id}`, {
                 title,
                 description,
                 category,
@@ -45,7 +44,7 @@ const EditNote = () => {
     };
 
     const getNoteById = async () => {
-        const response = await axios.get(API_ENDPOINTS.NOTE_BY_ID(id));
+        const response = await apiClient.get(`/notes/${id}`);
         setTitle(response.data.title);
         setDescription(response.data.description);
         setCategory(response.data.category);

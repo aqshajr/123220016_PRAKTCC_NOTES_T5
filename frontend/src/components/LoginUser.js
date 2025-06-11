@@ -19,6 +19,8 @@ const LoginUser = () => {
             const response = await axios.post(API_ENDPOINTS.LOGIN, {
                 email,
                 password
+            }, {
+                withCredentials: true
             });
 
             // Simpan access token ke localStorage

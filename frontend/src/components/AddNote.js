@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { API_ENDPOINTS } from '../utils';
+import { apiClient } from '../utils';
 
 const AddNote = () => {
     const [title, setTitle] = useState('');
@@ -29,7 +28,7 @@ const AddNote = () => {
     const saveNote = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(API_ENDPOINTS.NOTES, {
+            await apiClient.post('/notes', {
                 title,
                 description,
                 category,

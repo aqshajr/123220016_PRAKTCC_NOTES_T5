@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { API_ENDPOINTS, getAuthHeaders, handleApiError } from '../utils';
+import { apiClient } from '../utils';
 
 const NoteList = () => {
     const [notes, setNotes] = useState([]);
@@ -14,23 +13,19 @@ const NoteList = () => {
 
     const getNotes = async () => {
         try {
-            const response = await axios.get(API_ENDPOINTS.NOTES, {
-                headers: getAuthHeaders()
-            });
+            const response = await apiClient.get('/notes');
             setNotes(response.data);
         } catch (error) {
-            handleApiError(error);
+            console.error('Error fetching notes:', error);
         }
     };
 
     const deleteNote = async (id) => {
         try {
-            await axios.delete(API_ENDPOINTS.NOTE_BY_ID(id), {
-                headers: getAuthHeaders()
-            });
+            await apiClient.delete(`/notes/${id}`);
             getNotes();
         } catch (error) {
-            handleApiError(error);
+            console.error('Error deleting note:', error);
         }
     };
 

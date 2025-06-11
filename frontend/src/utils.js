@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 // API Configuration
 export const API_BASE_URL = 'https://tugas6-backend-749281711221.us-central1.run.app';
 
@@ -17,7 +19,65 @@ export const API_ENDPOINTS = {
     USER_BY_ID: (id) => `${API_BASE_URL}/users/${id}`,
 };
 
-// Helper function untuk menambahkan auth header
+// Create axios instance with default config
+export const apiClient = axios.create({
+    baseURL: API_BASE_URL,
+    withCredentials: true, // Include cookies for refresh token
+});
+
+// Add request interceptor to include JWT token
+apiClient.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// Add response interceptor to handle token refresh
+apiClient.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
+
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            try {
+                // Try to refresh token
+                const response = await axios.get(API_ENDPOINTS.REFRESH_TOKEN, {
+                    withCredentials: true
+                });
+                
+                const newToken = response.data.accessToken;
+                localStorage.setItem('accessToken', newToken);
+                
+                // Retry original request with new token
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                return apiClient(originalRequest);
+            } catch (refreshError) {
+                // Refresh failed, redirect to login
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('userEmail');
+                window.location.href = '/login';
+                return Promise.reject(refreshError);
+            }
+        }
+
+        if (error.response?.status === 403) {
+            console.error('Access forbidden:', error.response.data);
+        }
+
+        return Promise.reject(error);
+    }
+);
+
+// Helper function untuk menambahkan auth header (deprecated, use apiClient instead)
 export const getAuthHeaders = () => {
     const token = localStorage.getItem('accessToken');
     return token ? { Authorization: `Bearer ${token}` } : {};
