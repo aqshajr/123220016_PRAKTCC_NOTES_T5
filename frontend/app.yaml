@@ -4,14 +4,29 @@ service: default
 handlers:
   - url: /static
     static_dir: build/static
+    secure: always
+    http_headers:
+      Strict-Transport-Security: "max-age=31536000; includeSubDomains"
+      X-Content-Type-Options: "nosniff"
 
   - url: /(.*\.(js|css|ico|png|jpg|svg|woff|woff2))$
     static_files: build/\1
     upload: build/.*\.(js|css|ico|png|jpg|svg|woff|woff2)$
+    secure: always
+    http_headers:
+      Strict-Transport-Security: "max-age=31536000; includeSubDomains"
+      X-Content-Type-Options: "nosniff"
 
   - url: /.*
     static_files: build/index.html
     upload: build/index.html
+    secure: always
+    http_headers:
+      Strict-Transport-Security: "max-age=31536000; includeSubDomains"
+      X-Content-Type-Options: "nosniff"
+      X-Frame-Options: "DENY"
+      X-XSS-Protection: "1; mode=block"
+      Content-Security-Policy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://tugas6-backend-749281711221.us-central1.run.app"
 
 env_variables:
   NODE_ENV: production
