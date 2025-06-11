@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { API_ENDPOINTS, getAuthHeaders, handleApiError } from '../utils';
@@ -28,7 +28,7 @@ const EditNote = () => {
 
     useEffect(() => {
         getNoteById();
-    }, []);
+    }, [getNoteById]);
 
     const updateNote = async (e) => {
         e.preventDefault();
@@ -47,7 +47,7 @@ const EditNote = () => {
         }
     };
 
-    const getNoteById = async () => {
+    const getNoteById = useCallback(async () => {
         try {
             const response = await axios.get(API_ENDPOINTS.NOTE_BY_ID(id), {
                 headers: getAuthHeaders()
@@ -59,7 +59,7 @@ const EditNote = () => {
             console.error('Error fetching note:', error);
             handleApiError(error);
         }
-    };
+    }, [id]);
 
     return (
         <div style={styles.container}>
