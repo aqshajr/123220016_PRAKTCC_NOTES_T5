@@ -27,7 +27,6 @@ const SignupUser = () => {
         setIsLoading(true);
         setMessage('');
 
-        // Validasi password
         if (formData.password !== formData.confPassword) {
             setMessage('Password and Confirm Password tidak cocok');
             setIsLoading(false);
@@ -44,7 +43,6 @@ const SignupUser = () => {
 
             setMessage('Registrasi berhasil! Redirecting to login...');
             
-            // Reset form
             setFormData({
                 name: '',
                 email: '',
@@ -52,7 +50,6 @@ const SignupUser = () => {
                 confPassword: ''
             });
 
-            // Redirect ke halaman login setelah 2 detik
             setTimeout(() => {
                 navigate('/login');
             }, 2000);
@@ -72,20 +69,20 @@ const SignupUser = () => {
                 
                 <form onSubmit={handleSignup} style={styles.form}>
                     <div style={styles.inputGroup}>
-                        <label style={styles.label}>Full Name:</label>
+                        <label style={styles.label}>Name</label>
                         <input
                             type="text"
                             name="name"
                             value={formData.name}
                             onChange={handleInputChange}
                             style={styles.input}
-                            placeholder="Enter your full name"
+                            placeholder="Enter your name"
                             required
                         />
                     </div>
 
                     <div style={styles.inputGroup}>
-                        <label style={styles.label}>Email:</label>
+                        <label style={styles.label}>Email</label>
                         <input
                             type="email"
                             name="email"
@@ -98,7 +95,7 @@ const SignupUser = () => {
                     </div>
 
                     <div style={styles.inputGroup}>
-                        <label style={styles.label}>Password:</label>
+                        <label style={styles.label}>Password</label>
                         <input
                             type="password"
                             name="password"
@@ -111,7 +108,7 @@ const SignupUser = () => {
                     </div>
 
                     <div style={styles.inputGroup}>
-                        <label style={styles.label}>Confirm Password:</label>
+                        <label style={styles.label}>Confirm Password</label>
                         <input
                             type="password"
                             name="confPassword"

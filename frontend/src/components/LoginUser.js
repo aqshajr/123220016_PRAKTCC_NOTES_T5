@@ -23,13 +23,11 @@ const LoginUser = () => {
                 withCredentials: true
             });
 
-            // Simpan access token ke localStorage
             localStorage.setItem('accessToken', response.data.accessToken);
             localStorage.setItem('userEmail', email);
             
             setMessage('Login berhasil! Redirecting...');
             
-            // Redirect ke halaman utama setelah 1 detik
             setTimeout(() => {
                 navigate('/');
             }, 1000);
@@ -49,7 +47,7 @@ const LoginUser = () => {
                 
                 <form onSubmit={handleLogin} style={styles.form}>
                     <div style={styles.inputGroup}>
-                        <label style={styles.label}>Email:</label>
+                        <label style={styles.label}>Email</label>
                         <input
                             type="email"
                             value={email}
@@ -61,7 +59,7 @@ const LoginUser = () => {
                     </div>
 
                     <div style={styles.inputGroup}>
-                        <label style={styles.label}>Password:</label>
+                        <label style={styles.label}>Password</label>
                         <input
                             type="password"
                             value={password}
