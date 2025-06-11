@@ -44,9 +44,12 @@ apiClient.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+        
+        console.log(`❌ API Error: ${error.config.method?.toUpperCase()} ${error.config.url} - Status: ${error.response?.status}`);
 
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
+            console.log('🔄 Token expired, attempting refresh...');
 
             try {
                 // Try to refresh token
@@ -55,12 +58,16 @@ apiClient.interceptors.response.use(
                 });
                 
                 const newToken = response.data.accessToken;
+                console.log('✅ Token refreshed successfully');
                 localStorage.setItem('accessToken', newToken);
                 
                 // Retry original request with new token
                 originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                console.log(`🔄 Retrying original request: ${originalRequest.method?.toUpperCase()} ${originalRequest.url}`);
                 return apiClient(originalRequest);
             } catch (refreshError) {
+                console.error('❌ Token refresh failed:', refreshError);
+                console.log('Redirecting to login...');
                 // Refresh failed, redirect to login
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('userEmail');
@@ -70,7 +77,15 @@ apiClient.interceptors.response.use(
         }
 
         if (error.response?.status === 403) {
-            console.error('Access forbidden:', error.response.data);
+            console.error('❌ Access forbidden:', error.response.data);
+            console.log('🔍 Current token exists:', !!localStorage.getItem('accessToken'));
+            
+            // Check if token is missing
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                console.log('❌ No token found, redirecting to login...');
+                window.location.href = '/login';
+            }
         }
 
         return Promise.reject(error);
