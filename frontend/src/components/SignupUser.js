@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { API_ENDPOINTS } from '../utils';
 
 const SignupUser = () => {
@@ -15,9 +15,10 @@ const SignupUser = () => {
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
+        const { name, value } = e.target;
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [name]: value
         });
     };
 
@@ -26,34 +27,21 @@ const SignupUser = () => {
         setIsLoading(true);
         setMessage('');
 
-        // Validation
+        // Validasi password
         if (formData.password !== formData.confPassword) {
-            setMessage('Password dan konfirmasi password tidak cocok!');
+            setMessage('Password and Confirm Password tidak cocok');
             setIsLoading(false);
             return;
         }
 
         try {
-            console.log('Attempting signup with data:', {
-                name: formData.name,
-                email: formData.email,
-                password: '[HIDDEN]'
-            });
-
             const response = await axios.post(API_ENDPOINTS.USERS, {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password,
                 confPassword: formData.confPassword
-            }, {
-                // Add explicit headers for signup since it doesn't need auth
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true
             });
 
-            console.log('Signup successful:', response.data);
             setMessage('Registrasi berhasil! Redirecting to login...');
             
             // Reset form
@@ -70,24 +58,8 @@ const SignupUser = () => {
             }, 2000);
 
         } catch (error) {
-            console.error('Signup error details:', {
-                message: error.message,
-                response: error.response?.data,
-                status: error.response?.status,
-                headers: error.response?.headers
-            });
-            
-            let errorMessage = 'Registrasi gagal. Silakan coba lagi.';
-            
-            if (error.response?.data?.msg) {
-                errorMessage = error.response.data.msg;
-            } else if (error.message.includes('Network Error')) {
-                errorMessage = 'Network error. Please check your connection.';
-            } else if (error.response?.status === 0) {
-                errorMessage = 'Cannot connect to server. Please try again later.';
-            }
-            
-            setMessage(errorMessage);
+            console.error('Signup error:', error);
+            setMessage(error.response?.data?.msg || 'Registrasi gagal. Silakan coba lagi.');
         } finally {
             setIsLoading(false);
         }

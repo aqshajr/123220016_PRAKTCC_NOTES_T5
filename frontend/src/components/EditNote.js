@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { API_ENDPOINTS, getAuthHeaders, handleApiError } from '../utils';
+import { API_ENDPOINTS } from '../utils';
 
 const EditNote = () => {
     const [title, setTitle] = useState('');
@@ -28,7 +28,7 @@ const EditNote = () => {
 
     useEffect(() => {
         getNoteById();
-    }, [getNoteById]);
+    }, []);
 
     const updateNote = async (e) => {
         e.preventDefault();
@@ -36,30 +36,20 @@ const EditNote = () => {
             await axios.patch(API_ENDPOINTS.NOTE_BY_ID(id), {
                 title,
                 description,
-                category
-            }, {
-                headers: getAuthHeaders()
+                category,
             });
             navigate('/'); 
         } catch (error) {
-            console.error('Error updating note:', error);
-            handleApiError(error);
+            console.log(error);
         }
     };
 
-    const getNoteById = useCallback(async () => {
-        try {
-            const response = await axios.get(API_ENDPOINTS.NOTE_BY_ID(id), {
-                headers: getAuthHeaders()
-            });
-            setTitle(response.data.title);
-            setDescription(response.data.description);
-            setCategory(response.data.category);
-        } catch (error) {
-            console.error('Error fetching note:', error);
-            handleApiError(error);
-        }
-    }, [id]);
+    const getNoteById = async () => {
+        const response = await axios.get(API_ENDPOINTS.NOTE_BY_ID(id));
+        setTitle(response.data.title);
+        setDescription(response.data.description);
+        setCategory(response.data.category);
+    };
 
     return (
         <div style={styles.container}>
